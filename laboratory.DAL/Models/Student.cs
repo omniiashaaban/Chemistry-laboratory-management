@@ -12,13 +12,13 @@ namespace laboratory.DAL.Models
     {
         [Key]
         public int Id { get; set; }
-        public string DepartmentName { get; set; }
         public string Name { get; set; }
-        public string Email { get; set; }   
-        public Department Department { get; set; }
-        public int Level { get; set; }
+        public string Email { get; set; }
         public Group Group { get; set; }
         public int GroupId { get; set; }
+        public string GroupName { get; set; }
+        public string DepartmentName { get; set; } //1A
+
 
 
 

@@ -12,8 +12,8 @@ using laboratory.DAL.Data.context;
 namespace laboratory.DAL.Migrations
 {
     [DbContext(typeof(LaboratoryDbContext))]
-    [Migration("20250228130728_m")]
-    partial class m
+    [Migration("20250228221627_ll")]
+    partial class ll
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,10 +54,6 @@ namespace laboratory.DAL.Migrations
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("DepartmentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -90,10 +86,13 @@ namespace laboratory.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Level")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -275,10 +274,6 @@ namespace laboratory.DAL.Migrations
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("DepartmentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -310,28 +305,6 @@ namespace laboratory.DAL.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("laboratory.DAL.Models.StudentRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("StudentRequests");
-                });
-
             modelBuilder.Entity("laboratory.DAL.Models.Doctor", b =>
                 {
                     b.HasOne("laboratory.DAL.Models.Department", null)
@@ -341,17 +314,17 @@ namespace laboratory.DAL.Migrations
 
             modelBuilder.Entity("laboratory.DAL.Models.Experiment", b =>
                 {
-                    b.HasOne("laboratory.DAL.Models.Department", null)
+                    b.HasOne("laboratory.DAL.Models.Department", "Department")
                         .WithMany("Experiments")
-                        .HasForeignKey("DepartmentId");
-
-                    b.HasOne("laboratory.DAL.Models.Group", "Group")
-                        .WithMany("Experiments")
-                        .HasForeignKey("GroupId")
+                        .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Group");
+                    b.HasOne("laboratory.DAL.Models.Group", null)
+                        .WithMany("Experiments")
+                        .HasForeignKey("GroupId");
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("laboratory.DAL.Models.ExperimentMaterial", b =>
@@ -432,17 +405,6 @@ namespace laboratory.DAL.Migrations
                     b.Navigation("Department");
 
                     b.Navigation("Group");
-                });
-
-            modelBuilder.Entity("laboratory.DAL.Models.StudentRequest", b =>
-                {
-                    b.HasOne("laboratory.DAL.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("laboratory.DAL.Models.Department", b =>

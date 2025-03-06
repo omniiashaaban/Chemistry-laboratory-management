@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Compile Remove="Models\Chemical.cs" />
+    <Compile Remove="Models\RequestMaterail.cs" />
+    <Compile Remove="Models\StudentRequest.cs" />
   </ItemGroup>
 
   <ItemGroup>

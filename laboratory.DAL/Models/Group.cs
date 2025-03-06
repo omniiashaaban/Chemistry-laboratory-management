@@ -9,10 +9,12 @@ namespace laboratory.DAL.Models
     public class Group
     {
         public int Id { get; set; }
-        public string Name { get; set; } // اسم المجموعة مثل "Group A"
+        public string Name { get; set; } // اسم المجموعة مثل "Group 1A"
+        public int Level { get; set; }
+        public ICollection<Student> Students { get; set; }
 
-        public ICollection<Student> Students { get; set; } // الطلاب في هذه المجموعة
-        public ICollection<Experiment> Experiments { get; set; } // التجارب الخاصة بالمجموعة
+
+
     }
 
 }

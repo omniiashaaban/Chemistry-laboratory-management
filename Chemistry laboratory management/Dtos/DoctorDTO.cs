@@ -12,6 +12,5 @@ namespace Chemistry_laboratory_management.Dtos
         [MaxLength(100)]
         public string LastName { get; set; }
         public string Email { get; set; }
-        public string DepartmentName { get; set; }
     }
 }

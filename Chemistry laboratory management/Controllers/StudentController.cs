@@ -9,12 +9,14 @@ using Microsoft.AspNetCore.Mvc;
 public class StudentController : ControllerBase
 {
     private readonly GenericRepository<Student> _studentRepository;
-        private readonly GenericRepository<Department> _departmentRepository;
+    private readonly GenericRepository<Department> _departmentRepository;
+    private readonly GenericRepository<Group> _groupRepository;
 
-    public StudentController(GenericRepository<Student> studentRepository, GenericRepository<Department> departmentRepository)
+    public StudentController(GenericRepository<Student> studentRepository, GenericRepository<Department> departmentRepository, GenericRepository<Group> groupRepository  )
     {
         _studentRepository = studentRepository;
         _departmentRepository = departmentRepository;
+        _groupRepository = groupRepository;
     }
 
     // Endpoint to get all students
@@ -27,8 +29,8 @@ public class StudentController : ControllerBase
             Id = student.Id,
             Name = student.Name,
             Email = student.Email,
+            GroupName = student.GroupName,
             DepartmentName = student.DepartmentName,
-            Level = student.Level
         }).ToList();
 
         return Ok(studentDTOs);
@@ -49,8 +51,9 @@ public class StudentController : ControllerBase
             Id = student.Id,
             Name = student.Name,
             Email = student.Email,
+            GroupName = student.GroupName,
             DepartmentName = student.DepartmentName,
-            Level = student.Level
+
         };
 
         return Ok(studentDTO);
@@ -60,6 +63,12 @@ public class StudentController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<StudentDto>> CreateStudent([FromBody] StudentDto studentDto)
     {
+        var group= await _groupRepository.GetAllAsync();
+        bool groupExists = group.Any(d => d.Name == studentDto.GroupName);
+        if (!groupExists)
+        {
+            return NotFound(new ApiResponse(404, "Group not found."));
+        }
         var departement = await _departmentRepository.GetAllAsync();
         bool departmentExists = departement.Any(d => d.Name == studentDto.DepartmentName);
         if (!departmentExists)
@@ -71,17 +80,19 @@ public class StudentController : ControllerBase
             Name = studentDto.Name,
             Email = studentDto.Email,
             DepartmentName = studentDto.DepartmentName,
-            Level = studentDto.Level
+            GroupName = studentDto.GroupName,
+
+
         };
 
         await _studentRepository.AddAsync(student);
 
-        studentDto.Id = student.Id; 
+        studentDto.Id = student.Id;
 
         return CreatedAtAction(nameof(GetStudentById), new { id = student.Id }, studentDto);
     }
 
-    
+
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateStudent(int id, [FromBody] StudentDto studentDto)
     {
@@ -90,13 +101,11 @@ public class StudentController : ControllerBase
 
         if (string.IsNullOrWhiteSpace(studentDto.Name) ||
             string.IsNullOrWhiteSpace(studentDto.Email) ||
+            string.IsNullOrWhiteSpace(studentDto.GroupName) ||
             string.IsNullOrWhiteSpace(studentDto.DepartmentName))
         {
-            return BadRequest(new ApiResponse(400, "Name, Email, and Department are required fields."));
+            return BadRequest(new ApiResponse(400, "Name, Email, Department, and Group are required fields."));
         }
-
-        if (studentDto.Level <= 0)
-            return BadRequest(new ApiResponse(400, "Level must be a positive number."));
 
         var existingStudent = await _studentRepository.GetByIdAsync(id);
         if (existingStudent == null)
@@ -104,8 +113,8 @@ public class StudentController : ControllerBase
 
         existingStudent.Name = studentDto.Name;
         existingStudent.Email = studentDto.Email;
+        existingStudent.GroupName = studentDto.GroupName;
         existingStudent.DepartmentName = studentDto.DepartmentName;
-        existingStudent.Level = studentDto.Level;
 
         await _studentRepository.UpdateAsync(existingStudent);
 

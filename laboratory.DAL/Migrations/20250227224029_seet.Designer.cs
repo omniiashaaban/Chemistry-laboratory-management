@@ -104,7 +104,7 @@ namespace laboratory.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("WarningMessage")
+                    b.Property<string>("SafetyInstruction")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -234,7 +234,7 @@ namespace laboratory.DAL.Migrations
                     b.ToTable("Requests");
                 });
 
-            modelBuilder.Entity("laboratory.DAL.Models.RequestChemical", b =>
+            modelBuilder.Entity("laboratory.DAL.Models.RequestMaterial", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -257,7 +257,7 @@ namespace laboratory.DAL.Migrations
 
                     b.HasIndex("RequestId");
 
-                    b.ToTable("RequestChemical");
+                    b.ToTable("RequestMaterial");
                 });
 
             modelBuilder.Entity("laboratory.DAL.Models.Student", b =>
@@ -388,7 +388,7 @@ namespace laboratory.DAL.Migrations
                     b.Navigation("Experiment");
                 });
 
-            modelBuilder.Entity("laboratory.DAL.Models.RequestChemical", b =>
+            modelBuilder.Entity("laboratory.DAL.Models.RequestMaterial", b =>
                 {
                     b.HasOne("laboratory.DAL.Models.Material", "Material")
                         .WithMany()

@@ -12,7 +12,6 @@ namespace laboratory.DAL.Models
     {
         [Key]
         public int Id { get; set; }
-        public string DepartmentName { get; set; }
 
         [MaxLength(100)]
         public string FirstName { get; set; }

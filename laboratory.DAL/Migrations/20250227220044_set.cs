@@ -219,7 +219,7 @@ namespace laboratory.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RequestChemical",
+                name: "RequestMaterial",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -278,12 +278,12 @@ namespace laboratory.DAL.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_RequestChemical_MaterialId",
-                table: "RequestChemical",
+                table: "RequestMaterial",
                 column: "MaterialId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RequestChemical_RequestId",
-                table: "RequestChemical",
+                table: "RequestMaterial",
                 column: "RequestId");
 
             migrationBuilder.CreateIndex(
@@ -330,7 +330,7 @@ namespace laboratory.DAL.Migrations
                 name: "ExperimentMaterials");
 
             migrationBuilder.DropTable(
-                name: "RequestChemical");
+                name: "RequestMaterial");
 
             migrationBuilder.DropTable(
                 name: "StudentRequests");

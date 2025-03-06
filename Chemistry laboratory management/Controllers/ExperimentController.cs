@@ -52,8 +52,11 @@ namespace Chemistry_laboratory_management.Controllers
             {
                 Name = addExperimentDTO.Name,
                 Type = addExperimentDTO.Type,
-                WarningMessage = addExperimentDTO.WarningMessage,
-                GroupId = addExperimentDTO.GroupId
+                SafetyInstruction = addExperimentDTO.SafetyInstruction,
+                Level = addExperimentDTO.Level,
+                DepartmentId=addExperimentDTO.DepartmentId
+                
+                
             };
 
             await _experimentService.AddExperimentAsync(experiment);
@@ -98,9 +101,10 @@ namespace Chemistry_laboratory_management.Controllers
                 Id = experiment.Id,
                 Name = experiment.Name,
                 Type = experiment.Type,
-                WarningMessage = experiment.WarningMessage,
+                SafetyInstruction = experiment.SafetyInstruction,
                 PdfFilePath = experiment.PdfFilePath,
-                GroupId = experiment.GroupId
+                Level = experiment.Level,
+                DepartmentId = experiment.DepartmentId
             };
 
             return Ok(experimentDTO);
@@ -120,9 +124,10 @@ namespace Chemistry_laboratory_management.Controllers
                     Id = experiment.Id,
                     Name = experiment.Name,
                     Type = experiment.Type,
-                    WarningMessage = experiment.WarningMessage,
+                    SafetyInstruction = experiment.SafetyInstruction,
                     PdfFilePath = experiment.PdfFilePath,
-                    GroupId = experiment.GroupId
+                    Level = experiment.Level,
+                    DepartmentId = experiment.DepartmentId
                 });
             }
 

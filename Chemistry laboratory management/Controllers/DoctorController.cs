@@ -16,11 +16,9 @@ namespace Chemistry_laboratory_management.Controllers
     public class DoctorController : ControllerBase
     {
         private readonly GenericRepository<Doctor> _doctorRepository;
-        private readonly GenericRepository<Department> _departmentRepository;
-        public DoctorController(GenericRepository<Doctor> doctorRepositor, GenericRepository<Department> departmentRepository)
+        public DoctorController(GenericRepository<Doctor> doctorRepositor)
         {
             _doctorRepository = doctorRepositor;
-            _departmentRepository = departmentRepository;
         }
 
         
@@ -39,7 +37,6 @@ namespace Chemistry_laboratory_management.Controllers
                 FirstName = doctor.FirstName,
                 LastName = doctor.LastName,
                 Email = doctor.Email,
-                DepartmentName = doctor.DepartmentName
             };
 
             return Ok(doctorDTO);
@@ -59,7 +56,7 @@ namespace Chemistry_laboratory_management.Controllers
                     FirstName = doctor.FirstName,
                     LastName = doctor.LastName,
                     Email = doctor.Email,
-                    DepartmentName= doctor.DepartmentName
+                    
                 });
             }
 
@@ -72,20 +69,14 @@ namespace Chemistry_laboratory_management.Controllers
             {
                 return BadRequest("Invalid doctor data.");
             }
-            var departement = await _departmentRepository.GetAllAsync();
-            bool departmentExists = departement.Any(d => d.Name == doctorDTO.DepartmentName);
-            if (!departmentExists)
-            {
-                return NotFound(new ApiResponse(404, "Department not found."));
-            }
-
+          
             var doctor = new Doctor
             {
 
                 FirstName = doctorDTO.FirstName,
                 LastName = doctorDTO.LastName,             
                  Email = doctorDTO.Email,
-                DepartmentName = doctorDTO.DepartmentName
+                
             };
 
             await _doctorRepository.AddAsync(doctor);

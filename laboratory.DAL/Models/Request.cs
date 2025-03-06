@@ -26,7 +26,7 @@ namespace laboratory.DAL.Models
 
         public string Status { get; set; } // Pending, Approved, Rejected
 
-        public ICollection<RequestChemical> RequestChemicals { get; set; } = new List<RequestChemical>();
+        //public ICollection<RequestMaterail> RequestChemicals { get; set; } = new List<RequestMaterail>();
         public string ExperimentName { get; set; }
     }
 
