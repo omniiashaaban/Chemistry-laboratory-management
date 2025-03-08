@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace laboratory.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class raddd : Migration
+    public partial class intialcreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,26 +32,13 @@ namespace laboratory.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SafetyInstruction = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SafetyInstruction = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Level = table.Column<int>(type: "int", nullable: false),
                     PdfFilePath = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Experiments", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LabAdmin",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LabAdmin", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -107,12 +94,14 @@ namespace laboratory.DAL.Migrations
                         name: "FK_DepartmentExperiment_Departments_DepartmentsId",
                         column: x => x.DepartmentsId,
                         principalTable: "Departments",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DepartmentExperiment_Experiments_ExperimentsId",
                         column: x => x.ExperimentsId,
                         principalTable: "Experiments",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,34 +121,14 @@ namespace laboratory.DAL.Migrations
                         name: "FK_ExperimentMaterials_Experiments_ExperimentId",
                         column: x => x.ExperimentId,
                         principalTable: "Experiments",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExperimentMaterials_Materials_MaterialId",
                         column: x => x.MaterialId,
                         principalTable: "Materials",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LabAdminMaterial",
-                columns: table => new
-                {
-                    LabAdminsId = table.Column<int>(type: "int", nullable: false),
-                    MaterialsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LabAdminMaterial", x => new { x.LabAdminsId, x.MaterialsId });
-                    table.ForeignKey(
-                        name: "FK_LabAdminMaterial_LabAdmin_LabAdminsId",
-                        column: x => x.LabAdminsId,
-                        principalTable: "LabAdmin",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_LabAdminMaterial_Materials_MaterialsId",
-                        column: x => x.MaterialsId,
-                        principalTable: "Materials",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -180,12 +149,14 @@ namespace laboratory.DAL.Migrations
                         name: "FK_Groups_Departments_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Groups_Doctors_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Doctors",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -198,7 +169,7 @@ namespace laboratory.DAL.Migrations
                     AttendanceCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CodeExpiry = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DoctorId = table.Column<int>(type: "int", nullable: false),
-                    GroupId = table.Column<int>(type: "int", nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: true),
                     ExperimentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -218,8 +189,7 @@ namespace laboratory.DAL.Migrations
                         name: "FK_Sections_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -230,8 +200,7 @@ namespace laboratory.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    GroupId = table.Column<int>(type: "int", nullable: false),
-                    GroupId1 = table.Column<int>(type: "int", nullable: true)
+                    GroupId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -240,12 +209,8 @@ namespace laboratory.DAL.Migrations
                         name: "FK_Students_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Students_Groups_GroupId1",
-                        column: x => x.GroupId1,
-                        principalTable: "Groups",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -262,12 +227,14 @@ namespace laboratory.DAL.Migrations
                         name: "FK_StudentSection_Sections_SectionsId",
                         column: x => x.SectionsId,
                         principalTable: "Sections",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_StudentSection_Students_StudentsId",
                         column: x => x.StudentsId,
                         principalTable: "Students",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -307,11 +274,6 @@ namespace laboratory.DAL.Migrations
                 column: "DoctorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LabAdminMaterial_MaterialsId",
-                table: "LabAdminMaterial",
-                column: "MaterialsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Sections_DoctorId",
                 table: "Sections",
                 column: "DoctorId");
@@ -338,11 +300,6 @@ namespace laboratory.DAL.Migrations
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_GroupId1",
-                table: "Students",
-                column: "GroupId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_StudentSection_StudentsId",
                 table: "StudentSection",
                 column: "StudentsId");
@@ -358,13 +315,7 @@ namespace laboratory.DAL.Migrations
                 name: "ExperimentMaterials");
 
             migrationBuilder.DropTable(
-                name: "LabAdminMaterial");
-
-            migrationBuilder.DropTable(
                 name: "StudentSection");
-
-            migrationBuilder.DropTable(
-                name: "LabAdmin");
 
             migrationBuilder.DropTable(
                 name: "Materials");

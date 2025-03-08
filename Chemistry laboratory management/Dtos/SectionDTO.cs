@@ -9,7 +9,7 @@ namespace Chemistry_laboratory_management.Dtos
         public int Id { get; set; }
         public String ExperimentName { get; set; }
         public int Level { get; set; }
-        public int GroupId { get; set; }
+        public int? GroupId { get; set; }
         public int ExperimentId { get; set; }
 
     }

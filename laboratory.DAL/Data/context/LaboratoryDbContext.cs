@@ -28,14 +28,7 @@ namespace laboratory.DAL.Data.context
         public DbSet<Student> Students { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                var foreignKeys = entityType.GetForeignKeys();
-                foreach (var fk in foreignKeys)
-                {
-                    fk.DeleteBehavior = DeleteBehavior.NoAction;
-                }
-            }
+            
             base.OnModelCreating(modelBuilder);
 
             // العلاقات بين الجداول
@@ -50,9 +43,10 @@ namespace laboratory.DAL.Data.context
                 .IsUnique();
 
             modelBuilder.Entity<Student>()
-              .HasOne(r => r.Group)
-              .WithMany()
-              .HasForeignKey(r => r.GroupId);
+            .HasOne(s => s.Group)
+            .WithMany(g => g.Students) 
+            .HasForeignKey(s => s.GroupId)
+            .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<Section>()
                 .HasOne(r => r.Doctor)
@@ -96,11 +90,6 @@ namespace laboratory.DAL.Data.context
                 .HasForeignKey(s => s.ExperimentId)
                 .OnDelete(DeleteBehavior.NoAction); // لا تقوم بحذف السجلات المرتبطة
 
-            modelBuilder.Entity<Section>()
-                .HasOne(s => s.Group)
-                .WithMany(g => g.sections)
-                .HasForeignKey(s => s.GroupId)
-                .OnDelete(DeleteBehavior.SetNull);
 
 
         }

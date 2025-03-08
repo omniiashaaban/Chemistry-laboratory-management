@@ -29,6 +29,5 @@ namespace laboratory.DAL.Models
 
         [Required]
         public DateTime ExpirationDate { get; set; } // Expiry date
-        public ICollection<LabAdmin> LabAdmins { get; set; } = new List<LabAdmin>();
     }
 }

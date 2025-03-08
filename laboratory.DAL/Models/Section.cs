@@ -20,15 +20,16 @@ namespace laboratory.DAL.Models
         public DateTime CodeExpiry { get; set; }
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; }
-        public int GroupId { get; set; }
-        public Group Group { get; set; }
+        public int? GroupId { get; set; }
+        public Group? Group { get; set; }
 
         public int ExperimentId { get; set; }
         public Experiment Experiment { get; set; }
 
         //public ICollection<RequestMaterail> RequestChemicals { get; set; } = new List<RequestMaterail>();
         public ICollection<Student> Students { get; set; } = new List<Student>();
-        public Dictionary<int, bool> AttendanceRecords { get; set; } = new Dictionary<int, bool>();
+        [NotMapped]
+        public Dictionary<int, bool> AttendanceRecords { get; set; } = new();
 
 
     }

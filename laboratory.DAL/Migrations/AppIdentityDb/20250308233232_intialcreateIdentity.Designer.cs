@@ -12,8 +12,8 @@ using laboratory.DAL.Data.context;
 namespace laboratory.DAL.Migrations.AppIdentityDb
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20250227220655_kk")]
-    partial class kk
+    [Migration("20250308233232_intialcreateIdentity")]
+    partial class intialcreateIdentity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

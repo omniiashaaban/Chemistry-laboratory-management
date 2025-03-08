@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace laboratory.DAL.Migrations.AppIdentityDb
 {
     /// <inheritdoc />
-    public partial class ff : Migration
+    public partial class intialcreateIdentity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

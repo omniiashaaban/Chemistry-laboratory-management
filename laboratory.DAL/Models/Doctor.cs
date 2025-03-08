@@ -18,8 +18,8 @@ namespace laboratory.DAL.Models
         [MaxLength(100)]
         public string LastName { get; set; }
         public string Email { get; set; }
-        public ICollection<Group> Groups { get; set; } = new List<Group>();
-        public ICollection<Section> sections { get; set; } = new List<Section>();
+        public ICollection<Group>? Groups { get; set; } = new List<Group>();
+        public ICollection<Section>? sections { get; set; } = new List<Section>();
 
 
 

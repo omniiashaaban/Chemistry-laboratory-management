@@ -1,6 +1,5 @@
 ﻿using Chemistry_laboratory_management.Dtos;
 using laboratory.DAL.Data.context;
-using laboratory.DAL.Migrations;
 using laboratory.DAL.Models;
 using laboratory.DAL.Repository;
 using LinkDev.Facial_Recognition.BLL.Helper.Errors;
