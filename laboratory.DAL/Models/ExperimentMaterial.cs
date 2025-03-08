@@ -11,7 +11,7 @@ namespace laboratory.DAL.Models
     public class ExperimentMaterial
     {
         public int Id { get; set; }
-        public int ExperimentId { get; set; } 
+        public int ExperimentId { get; set; }
         public Experiment Experiment { get; set; }
         public int MaterialId { get; set; } 
         public Material Material { get; set; }

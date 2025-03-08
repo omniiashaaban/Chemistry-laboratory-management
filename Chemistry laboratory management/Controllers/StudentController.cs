@@ -12,7 +12,7 @@ public class StudentController : ControllerBase
     private readonly GenericRepository<Department> _departmentRepository;
     private readonly GenericRepository<Group> _groupRepository;
 
-    public StudentController(GenericRepository<Student> studentRepository, GenericRepository<Department> departmentRepository, GenericRepository<Group> groupRepository  )
+    public StudentController(GenericRepository<Student> studentRepository, GenericRepository<Department> departmentRepository, GenericRepository<Group> groupRepository)
     {
         _studentRepository = studentRepository;
         _departmentRepository = departmentRepository;
@@ -29,8 +29,7 @@ public class StudentController : ControllerBase
             Id = student.Id,
             Name = student.Name,
             Email = student.Email,
-            GroupName = student.GroupName,
-            DepartmentName = student.DepartmentName,
+            GroupId = student.Group.Id,
         }).ToList();
 
         return Ok(studentDTOs);
@@ -51,8 +50,7 @@ public class StudentController : ControllerBase
             Id = student.Id,
             Name = student.Name,
             Email = student.Email,
-            GroupName = student.GroupName,
-            DepartmentName = student.DepartmentName,
+            GroupId = student.Group.Id,
 
         };
 
@@ -63,26 +61,17 @@ public class StudentController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<StudentDto>> CreateStudent([FromBody] StudentDto studentDto)
     {
-        var group= await _groupRepository.GetAllAsync();
-        bool groupExists = group.Any(d => d.Name == studentDto.GroupName);
+        var group = await _groupRepository.GetAllAsync();
+        bool groupExists = group.Any(d => d.Id == studentDto.GroupId);
         if (!groupExists)
         {
             return NotFound(new ApiResponse(404, "Group not found."));
-        }
-        var departement = await _departmentRepository.GetAllAsync();
-        bool departmentExists = departement.Any(d => d.Name == studentDto.DepartmentName);
-        if (!departmentExists)
-        {
-            return NotFound(new ApiResponse(404, "Department not found."));
         }
         var student = new Student
         {
             Name = studentDto.Name,
             Email = studentDto.Email,
-            DepartmentName = studentDto.DepartmentName,
-            GroupName = studentDto.GroupName,
-
-
+            GroupId = studentDto.GroupId
         };
 
         await _studentRepository.AddAsync(student);
@@ -100,11 +89,9 @@ public class StudentController : ControllerBase
             return BadRequest(new ApiResponse(400, "The provided ID does not match the student ID."));
 
         if (string.IsNullOrWhiteSpace(studentDto.Name) ||
-            string.IsNullOrWhiteSpace(studentDto.Email) ||
-            string.IsNullOrWhiteSpace(studentDto.GroupName) ||
-            string.IsNullOrWhiteSpace(studentDto.DepartmentName))
+            string.IsNullOrWhiteSpace(studentDto.Email))
         {
-            return BadRequest(new ApiResponse(400, "Name, Email, Department, and Group are required fields."));
+            return BadRequest(new ApiResponse(400, "Name, Email  are required fields."));
         }
 
         var existingStudent = await _studentRepository.GetByIdAsync(id);
@@ -113,8 +100,7 @@ public class StudentController : ControllerBase
 
         existingStudent.Name = studentDto.Name;
         existingStudent.Email = studentDto.Email;
-        existingStudent.GroupName = studentDto.GroupName;
-        existingStudent.DepartmentName = studentDto.DepartmentName;
+        existingStudent.Group.Id = studentDto.GroupId;
 
         await _studentRepository.UpdateAsync(existingStudent);
 
@@ -132,4 +118,7 @@ public class StudentController : ControllerBase
 
         return Ok(new ApiResponse(200, "Student deleted successfully."));
     }
+
+
+
 }

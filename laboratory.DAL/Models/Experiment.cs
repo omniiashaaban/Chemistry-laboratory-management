@@ -15,9 +15,10 @@ namespace laboratory.DAL.Models
         public string Type { get; set; } // نوع التجربة
         public string SafetyInstruction { get; set; } // رسالة الخطأ
         public int Level { get; set; }
-        public int DepartmentId { get; set; } // مفتاح خارجي للمجموعة
-        public Department Department { get; set; } // العلاقة مع المجموعة
+
         public string PdfFilePath { get; set; } = "";
-        public ICollection<ExperimentMaterial> ExperimentMaterials { get; set; } // المواد المستخدمة في التجربة
+        public ICollection<ExperimentMaterial> ExperimentMaterials { get; set; } = new List<ExperimentMaterial>();
+        public ICollection<Department> Departments { get; set; } = new List<Department>();
+        public ICollection<Section> Sections { get; set; }= new List<Section>();
     }
 }

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace laboratory.DAL.Models
 {
@@ -14,14 +15,9 @@ namespace laboratory.DAL.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public Group Group { get; set; }
         public int GroupId { get; set; }
-        public string GroupName { get; set; }
-        public string DepartmentName { get; set; } //1A
-
-
-
-
+        public Group Group { get; set; }// العلاقة مع الكيان Group
+        public ICollection<Section> Sections { get; set; } = new List<Section>();
     }
 
 }

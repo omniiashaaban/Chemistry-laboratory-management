@@ -15,10 +15,12 @@ namespace Chemistry_laboratory_management.Controllers
     [ApiController]
     public class DoctorController : ControllerBase
     {
+        private readonly GenericRepository<Section> _sectionRepository;
         private readonly GenericRepository<Doctor> _doctorRepository;
-        public DoctorController(GenericRepository<Doctor> doctorRepositor)
+        public DoctorController(GenericRepository<Doctor> doctorRepositor, GenericRepository<Section> sectionRepository)
         {
             _doctorRepository = doctorRepositor;
+           _sectionRepository  = sectionRepository;
         }
 
         
@@ -85,5 +87,7 @@ namespace Chemistry_laboratory_management.Controllers
 
             return CreatedAtAction(nameof(GetDoctorById), new { id = doctor.Id }, doctorDTO);
         }
+        
+       
     }
 }

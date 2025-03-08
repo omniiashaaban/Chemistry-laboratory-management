@@ -9,6 +9,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Chemistry_laboratory_management.Helper;
 using laboratory.BLL.Services.laboratory.BLL.Services;
+using laboratory.DAL.Repository;
 
 namespace Chemistry_laboratory_management.Controllers
 {
@@ -19,24 +20,27 @@ namespace Chemistry_laboratory_management.Controllers
         private readonly IExperimentService _experimentService;
         private readonly MaterialService _materialService; // Assuming MaterialService for material management
         private readonly IWebHostEnvironment _env;
-
+        private readonly GenericRepository<Department> _departmentRepository;
         // Inject IWebHostEnvironment to handle file paths
-        public ExperimentController(IExperimentService experimentService, MaterialService materialService, IWebHostEnvironment env)
+        public ExperimentController(IExperimentService experimentService, GenericRepository<Department> departmentRepository, MaterialService materialService, IWebHostEnvironment env)
         {
             _experimentService = experimentService;
             _materialService = materialService;
             _env = env;
+            _departmentRepository= departmentRepository;
         }
 
         #region Experiment Operations
 
         // Endpoint to add a new experiment
         [HttpPost("add")]
-        public async Task<ActionResult<ExperimentResponseDTO>> AddExperiment([FromBody] AddExperimentDTO addExperimentDTO)
+        public async Task<ActionResult<ExperimentResponseDTO>> AddExperiment([FromBody] AddExperimentDTO addExperimentDTO) 
+
         {
+            
             // Validate material availability before creating the experiment
             foreach (var material in addExperimentDTO.Materials)
-            {
+            {       
                 var isAvailable = await _materialService.CheckMaterialAvailability(material.MaterialId, material.QuantityRequired);
                 if (!isAvailable)
                 {
@@ -47,6 +51,11 @@ namespace Chemistry_laboratory_management.Controllers
                 await _materialService.DecreaseMaterialStock(material.MaterialId, material.QuantityRequired);
             }
 
+
+            var departments = await _departmentRepository.GetAllAsync();
+                var depts = departments.Where(d => addExperimentDTO.DepartmentIds.Contains(d.Id))
+                .ToList();
+
             // Create the experiment object
             var experiment = new Experiment
             {
@@ -54,9 +63,9 @@ namespace Chemistry_laboratory_management.Controllers
                 Type = addExperimentDTO.Type,
                 SafetyInstruction = addExperimentDTO.SafetyInstruction,
                 Level = addExperimentDTO.Level,
-                DepartmentId=addExperimentDTO.DepartmentId
-                
-                
+                Departments = depts
+
+
             };
 
             await _experimentService.AddExperimentAsync(experiment);
@@ -104,7 +113,7 @@ namespace Chemistry_laboratory_management.Controllers
                 SafetyInstruction = experiment.SafetyInstruction,
                 PdfFilePath = experiment.PdfFilePath,
                 Level = experiment.Level,
-                DepartmentId = experiment.DepartmentId
+                DepartmentIds = experiment.Departments.Select(d => d.Id).ToList()
             };
 
             return Ok(experimentDTO);
@@ -127,13 +136,12 @@ namespace Chemistry_laboratory_management.Controllers
                     SafetyInstruction = experiment.SafetyInstruction,
                     PdfFilePath = experiment.PdfFilePath,
                     Level = experiment.Level,
-                    DepartmentId = experiment.DepartmentId
+                    DepartmentIds = experiment.Departments.Select(d => d.Id).ToList()
                 });
             }
 
             return Ok(experimentDTOs);
         }
-
         // Endpoint to download a PDF for an experiment
         [HttpGet("download-pdf/{experimentId}")]
         public async Task<IActionResult> DownloadPdf(int experimentId)

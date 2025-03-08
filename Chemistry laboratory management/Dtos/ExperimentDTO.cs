@@ -9,6 +9,7 @@
         public string PdfFilePath { get; set; }
         public int Level { get; set; }
         public int DepartmentId { get; set; }
+        public List<int> DepartmentIds { get; internal set; }
     }
 
     public class AddExperimentDTO
@@ -21,6 +22,7 @@
         public int DepartmentId { get; set; }
         public int id { get; set; }
         public List<ExperimentMaterialDTO> Materials { get; set; }
+        public List<int> DepartmentIds { get; set; }
     }
 
     public class ExperimentMaterialDTO
