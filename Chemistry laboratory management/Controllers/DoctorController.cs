@@ -40,8 +40,7 @@ namespace Chemistry_laboratory_management.Controllers
                 FirstName = doctor.FirstName,
                 LastName = doctor.LastName,
                 Email = doctor.Email,
-                GroupIds = doctor.Groups.Select(d => d.Id).ToList() 
-
+                //  GroupIds = doctor.Groups.Select(d => d.Id).ToList()
             };
 
             return Ok(doctorDTO);
@@ -68,28 +67,31 @@ namespace Chemistry_laboratory_management.Controllers
 
             return Ok(doctorDTOs);
         }
-        [HttpGet("{doctorId}/groups")]
-        public async Task<IActionResult> GetDoctorWithGroups(int doctorId)
-        {
-            var doctors = await _doctorRepository.GetAllAsync();
-            var groups = await _groupRepository.GetAllAsync();
 
-
-            var doctor = doctors.Where(d => d.Id == doctorId).Select(d => new
+            [HttpPost]
+            public async Task<ActionResult<DoctorDTO>> CreateDoctor([FromBody] DoctorDTO doctorDTO)
             {
-              Groups = groups.Where(g => g.DoctorId == d.Id)
-                                           .Select(g => new { g.Id, g.Name })
-                                           .ToList()});
+                if (doctorDTO == null)
+                {
+                    return BadRequest("Invalid doctor data.");
+                }
 
+                var doctor = new Doctor
+                {
 
-            if (doctor == null)
-            {
-                return NotFound(new ApiResponse(404, "Doctor not found"));
+                    FirstName = doctorDTO.FirstName,
+                    LastName = doctorDTO.LastName,
+                    Email = doctorDTO.Email,
+
+                };
+
+                await _doctorRepository.AddAsync(doctor);
+
+                doctorDTO.Id = doctor.Id;
+
+                return CreatedAtAction(nameof(GetDoctorById), new { id = doctor.Id }, doctorDTO);
             }
-
-            return Ok(doctor);
-
 
 
         }
-    } }
+    }

@@ -59,14 +59,21 @@ public class GroupController : ControllerBase
     public async Task<IActionResult> GetGroupsByDoctor(int doctorId)
     {
         var Groups = await _groupRepository.GetAllAsync();
-        var groups =Groups.Where(g => g.DoctorId == doctorId)
+        var groups =Groups.Where(g => g.DoctorId == doctorId).Select(g => new 
+        {
+             g.Id,
+             g.Name,
+             g.DepartmentId
+        })
+
                                    .ToList();
 
-
+        
         if (!groups.Any())
         {
             return NotFound(new ApiResponse(404,  "No groups for this doctor." ));
         }
+      
 
         return Ok(groups);
     }
