@@ -29,7 +29,7 @@ public class StudentController : ControllerBase
             Id = student.Id,
             Name = student.Name,
             Email = student.Email,
-            GroupId = student.Group.Id,
+            GroupId = student.GroupId,
         }).ToList();
 
         return Ok(studentDTOs);
@@ -50,7 +50,7 @@ public class StudentController : ControllerBase
             Id = student.Id,
             Name = student.Name,
             Email = student.Email,
-            GroupId = student.Group.Id,
+            GroupId = student.GroupId,
 
         };
 
@@ -85,8 +85,7 @@ public class StudentController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateStudent(int id, [FromBody] StudentDto studentDto)
     {
-        if (id != studentDto.Id)
-            return BadRequest(new ApiResponse(400, "The provided ID does not match the student ID."));
+       
 
         if (string.IsNullOrWhiteSpace(studentDto.Name) ||
             string.IsNullOrWhiteSpace(studentDto.Email))
@@ -97,10 +96,14 @@ public class StudentController : ControllerBase
         var existingStudent = await _studentRepository.GetByIdAsync(id);
         if (existingStudent == null)
             return NotFound(new ApiResponse(404, "Student not found."));
+        
+        var existingGroup = await _departmentRepository.GetByIdAsync(id);
+        if (existingGroup== null)
+            return NotFound(new ApiResponse(404, "Department not found."));
 
         existingStudent.Name = studentDto.Name;
         existingStudent.Email = studentDto.Email;
-        existingStudent.Group.Id = studentDto.GroupId;
+        existingStudent.GroupId = studentDto.GroupId;
 
         await _studentRepository.UpdateAsync(existingStudent);
 

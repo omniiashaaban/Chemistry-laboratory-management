@@ -15,7 +15,7 @@ namespace laboratory.DAL.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public int? GroupId { get; set; }
+        public int GroupId { get; set; }
         public Group? Group { get; set; }
         public ICollection<Section> Sections { get; set; } = new List<Section>();
     }

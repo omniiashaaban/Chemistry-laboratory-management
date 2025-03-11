@@ -29,8 +29,8 @@ public class GroupController : ControllerBase
         {
             Name = group.Name,
             Level = group.Level,
-            DepartmentId = group.Department.Id,
-            DoctorId = group.Doctor.Id
+            DepartmentId = group.DepartmentId,
+            DoctorId = group.DoctorId
         }).ToList();
 
         return Ok(groupDTOs);
@@ -49,8 +49,8 @@ public class GroupController : ControllerBase
         {
             Name = group.Name,
             Level = group.Level,
-            DepartmentId = group.Department.Id,
-            DoctorId = group.Doctor.Id
+            DepartmentId = group.DepartmentId,
+            DoctorId = group.DoctorId
         };
 
         return Ok(groupDTO);
@@ -63,10 +63,9 @@ public class GroupController : ControllerBase
         {
              g.Id,
              g.Name,
-             g.DepartmentId
-        })
+            g.DepartmentId,
 
-                                   .ToList();
+        }).ToList();
 
         
         if (!groups.Any())
