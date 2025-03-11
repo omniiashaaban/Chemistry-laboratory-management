@@ -8,5 +8,6 @@ namespace Chemistry_laboratory_management.Dtos
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
+      
     }
 }

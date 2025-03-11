@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20250308232801_intialcreate.cs" />
+    <Compile Remove="Migrations\20250308232801_intialcreate.Designer.cs" />
+    <Compile Remove="Migrations\20250310222941_bbbbbb.cs" />
+    <Compile Remove="Migrations\20250310222941_bbbbbb.Designer.cs" />
     <Compile Remove="Models\Chemical.cs" />
     <Compile Remove="Models\RequestMaterail.cs" />
     <Compile Remove="Models\StudentRequest.cs" />

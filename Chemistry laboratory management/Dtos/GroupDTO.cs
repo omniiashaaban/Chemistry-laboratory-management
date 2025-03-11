@@ -7,6 +7,6 @@ namespace Chemistry_laboratory_management.Dtos
         public string Name { get; set; } // اسم المجموعة مثل "Group 1A"
         public int Level { get; set; }
         public int DepartmentId { get; set; }
-        public string DepartmentName { get; set; }
+        public int DoctorId { get; set; }
     }
 }
