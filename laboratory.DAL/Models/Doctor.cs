@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,10 +9,18 @@ using System.Threading.Tasks;
 
 namespace laboratory.DAL.Models
 {
-    public class Doctor
+    public class Doctor 
     {
         [Key]
         public int Id { get; set; }
+        [Required]
+        public string AppUserId { get; set; }
+
+        [ForeignKey("AppUserId")]
+        public AppUser User { get; set; }
+
+    
+
 
         [MaxLength(100)]
         public string FirstName { get; set; }

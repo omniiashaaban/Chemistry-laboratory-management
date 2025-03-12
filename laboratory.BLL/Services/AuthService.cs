@@ -27,7 +27,7 @@
         new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? "Student") // إضافة الدور للـ Token
     };
 
-            var authKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var authKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])); 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
