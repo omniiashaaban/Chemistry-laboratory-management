@@ -6,17 +6,18 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using laboratory.DAL.Models.Identity;
 
 namespace laboratory.DAL.Models
 {
-   public class LabAdmin 
+    public class LabAdmin 
     {
         public int Id { get; set; }
         [Required]
         public string AppUserId { get; set; }
-
         [ForeignKey("AppUserId")]
-        public AppUser User { get; set; }
+        public AppUser AppUser { get; set; }
+
 
         [Required]
         public string Specialty { get; set; }

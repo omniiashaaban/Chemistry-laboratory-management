@@ -2,6 +2,7 @@
 using laboratory.DAL.Models;
 using laboratory.DAL.Repository;
 using LinkDev.Facial_Recognition.BLL.Helper.Errors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -20,6 +21,7 @@ public class GroupController : ControllerBase
         _departmentRepository = departmentRepository;
         _doctorRepository = doctorRepository;
     }
+    [Authorize(Roles = "Student")]
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GroupDTO>>> GetAllGroups()

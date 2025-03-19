@@ -8,7 +8,7 @@ using laboratory.DAL.Data.context;
 
 #nullable disable
 
-namespace laboratory.DAL.Migrations
+namespace laboratory.DAL.Migrations.LaboratoryDb
 {
     [DbContext(typeof(LaboratoryDbContext))]
     partial class LaboratoryDbContextModelSnapshot : ModelSnapshot
@@ -52,62 +52,6 @@ namespace laboratory.DAL.Migrations
                     b.ToTable("StudentSection", (string)null);
                 });
 
-            modelBuilder.Entity("laboratory.DAL.Models.AppUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppUser");
-                });
-
             modelBuilder.Entity("laboratory.DAL.Models.Department", b =>
                 {
                     b.Property<int>("Id")
@@ -135,11 +79,7 @@ namespace laboratory.DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AppUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -157,10 +97,7 @@ namespace laboratory.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId")
-                        .IsUnique();
-
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -255,6 +192,62 @@ namespace laboratory.DAL.Migrations
                     b.ToTable("Groups");
                 });
 
+            modelBuilder.Entity("laboratory.DAL.Models.Identity.AppUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppUser");
+                });
+
             modelBuilder.Entity("laboratory.DAL.Models.LabAdmin", b =>
                 {
                     b.Property<int>("Id")
@@ -269,7 +262,7 @@ namespace laboratory.DAL.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Specialty")
                         .IsRequired()
@@ -277,10 +270,12 @@ namespace laboratory.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId")
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("LabAdmin");
+                    b.ToTable("LabAdmins");
                 });
 
             modelBuilder.Entity("laboratory.DAL.Models.Material", b =>
@@ -372,7 +367,6 @@ namespace laboratory.DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AppUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
@@ -386,14 +380,9 @@ namespace laboratory.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Specialty")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId")
-                        .IsUnique();
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -435,17 +424,11 @@ namespace laboratory.DAL.Migrations
 
             modelBuilder.Entity("laboratory.DAL.Models.Doctor", b =>
                 {
-                    b.HasOne("laboratory.DAL.Models.AppUser", "User")
-                        .WithOne("Doctor")
-                        .HasForeignKey("laboratory.DAL.Models.Doctor", "AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("laboratory.DAL.Models.Identity.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
 
-                    b.HasOne("laboratory.DAL.Models.Department", null)
-                        .WithMany("Doctors")
-                        .HasForeignKey("DepartmentId");
-
-                    b.Navigation("User");
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("laboratory.DAL.Models.ExperimentMaterial", b =>
@@ -488,13 +471,13 @@ namespace laboratory.DAL.Migrations
 
             modelBuilder.Entity("laboratory.DAL.Models.LabAdmin", b =>
                 {
-                    b.HasOne("laboratory.DAL.Models.AppUser", "User")
-                        .WithOne("LabAdmin")
-                        .HasForeignKey("laboratory.DAL.Models.LabAdmin", "AppUserId")
+                    b.HasOne("laboratory.DAL.Models.Identity.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("laboratory.DAL.Models.Material", b =>
@@ -531,11 +514,9 @@ namespace laboratory.DAL.Migrations
 
             modelBuilder.Entity("laboratory.DAL.Models.Student", b =>
                 {
-                    b.HasOne("laboratory.DAL.Models.AppUser", "User")
-                        .WithOne("Student")
-                        .HasForeignKey("laboratory.DAL.Models.Student", "AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("laboratory.DAL.Models.Identity.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
 
                     b.HasOne("laboratory.DAL.Models.Group", "Group")
                         .WithMany("Students")
@@ -543,27 +524,13 @@ namespace laboratory.DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("AppUser");
+
                     b.Navigation("Group");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("laboratory.DAL.Models.AppUser", b =>
-                {
-                    b.Navigation("Doctor")
-                        .IsRequired();
-
-                    b.Navigation("LabAdmin")
-                        .IsRequired();
-
-                    b.Navigation("Student")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("laboratory.DAL.Models.Department", b =>
                 {
-                    b.Navigation("Doctors");
-
                     b.Navigation("Groups");
                 });
 

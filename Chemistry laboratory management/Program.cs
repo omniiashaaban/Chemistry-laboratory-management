@@ -2,6 +2,7 @@
 using laboratory.BLL.Services;
 using laboratory.BLL.Services.laboratory.BLL.Services;
 using laboratory.DAL.Data.context;
+using laboratory.DAL.Models.Identity;
 using laboratory.DAL.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -16,23 +17,22 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        var IdentityConnection = builder.Configuration.GetConnectionString("IdentityConnection");
 
-        // 🔹 إضافة LaboratoryDbContext لإدارة البيانات
         builder.Services.AddDbContext<LaboratoryDbContext>(options =>
             options.UseSqlServer(connectionString));
+
         builder.Services.AddScoped<IExperimentService, ExperimentService>();
 
-        // 🔹 إضافة AppIdentityDbContext لإدارة المستخدمين و الأدوار
         builder.Services.AddDbContext<AppIdentityDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer(IdentityConnection));
 
-        // 🔹 إعداد الهوية (Identity) باستخدام AppIdentityDbContext
-        builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-            .AddEntityFrameworkStores<AppIdentityDbContext>()
-            .AddDefaultTokenProviders();
-        builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddIdentity<AppUser, IdentityRole>()
+         .AddEntityFrameworkStores<AppIdentityDbContext>()
+         .AddDefaultTokenProviders();
+
+        builder.Services.AddScoped<IAuthServices, AuthServese>();
         builder.Services.AddScoped<MaterialService>();
-
 
         builder.Services.AddScoped(typeof(GenericRepository<>));
         var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
@@ -64,28 +64,6 @@ public class Program
 
         var app = builder.Build();
 
-        // 🔹 إنشاء الأدوار عند بدء التشغيل
-        async Task CreateRoles(IServiceProvider serviceProvider)
-        {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = { "Doctor", "Student", "Admin" };
-
-            foreach (var roleName in roleNames)
-            {
-                var roleExists = await roleManager.RoleExistsAsync(roleName);
-                if (!roleExists)
-                {
-                    await roleManager.CreateAsync(new IdentityRole(roleName));
-                }
-            }
-        }
-
-        using (var scope = app.Services.CreateScope())
-        {
-            var services = scope.ServiceProvider;
-            await CreateRoles(services);
-        }
-
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -96,6 +74,29 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
+
+        // 🔹 استدعاء EnsureRoles عند تشغيل التطبيق
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+            await EnsureRoles(services);
+        }
+
         app.Run();
+    }
+
+    public static async Task EnsureRoles(IServiceProvider serviceProvider)
+    {
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+        string[] roleNames = { "Student", "Doctor", "Admin" };
+
+        foreach (var roleName in roleNames)
+        {
+            if (!await roleManager.RoleExistsAsync(roleName))
+            {
+                await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+        }
     }
 }

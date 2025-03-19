@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using laboratory.DAL.Models.Identity;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,15 +14,6 @@ namespace laboratory.DAL.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
-        public string AppUserId { get; set; }
-
-        [ForeignKey("AppUserId")]
-        public AppUser User { get; set; }
-
-    
-
-
         [MaxLength(100)]
         public string FirstName { get; set; }
         [MaxLength(100)]
@@ -30,7 +22,9 @@ namespace laboratory.DAL.Models
         public ICollection<Group>? Groups { get; set; } = new List<Group>();
         public ICollection<Section>? sections { get; set; } = new List<Section>();
 
-
+        public string ?AppUserId { get; set; }
+        [ForeignKey("AppUserId")]
+        public AppUser AppUser { get; set; }
 
     }
 

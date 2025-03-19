@@ -2,6 +2,7 @@
 using laboratory.DAL.Models;
 using laboratory.DAL.Repository;
 using LinkDev.Facial_Recognition.BLL.Helper.Errors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -18,6 +19,7 @@ public class StudentController : ControllerBase
         _departmentRepository = departmentRepository;
         _groupRepository = groupRepository;
     }
+    [Authorize(Roles = "Doctor")]
 
     // Endpoint to get all students
     [HttpGet]
@@ -61,12 +63,18 @@ public class StudentController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<StudentDto>> CreateStudent([FromBody] StudentDto studentDto)
     {
-        var group = await _groupRepository.GetAllAsync();
-        bool groupExists = group.Any(d => d.Id == studentDto.GroupId);
-        if (!groupExists)
+        var existingStudentWithEmail = await _studentRepository.GetAllAsync();
+        if (existingStudentWithEmail.Any(s => s.Email == studentDto.Email))
+        {
+            return BadRequest(new ApiResponse(400, "Email is already in use."));
+        }
+
+        var group = await _groupRepository.GetByIdAsync(studentDto.GroupId);
+        if (group == null)
         {
             return NotFound(new ApiResponse(404, "Group not found."));
         }
+
         var student = new Student
         {
             Name = studentDto.Name,
@@ -75,7 +83,6 @@ public class StudentController : ControllerBase
         };
 
         await _studentRepository.AddAsync(student);
-
         studentDto.Id = student.Id;
 
         return CreatedAtAction(nameof(GetStudentById), new { id = student.Id }, studentDto);

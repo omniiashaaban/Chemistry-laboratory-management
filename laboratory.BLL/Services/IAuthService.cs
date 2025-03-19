@@ -1,4 +1,6 @@
-﻿using System;
+﻿using laboratory.DAL.Models.Identity;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace laboratory.BLL.Services
 {
-    public interface IAuthService
+    public interface IAuthServices
     {
-        Task<string> CreateTokenAsync(string email, string displayName, IList<string> roles);
+        Task<string> CreateTokenAsync(AppUser appUSer, UserManager<AppUser> userManager);
     }
 }

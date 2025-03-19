@@ -26,12 +26,31 @@ namespace laboratory.DAL.Data.context
         public DbSet<Section> Sections { get; set; }
         public DbSet<Group> Groups { get; set; } //
         public DbSet<Student> Students { get; set; }
+        public DbSet<LabAdmin> LabAdmins { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             
             base.OnModelCreating(modelBuilder);
 
-            // العلاقات بين الجداول
+
+
+
+            #region ensures that Email is unique in the database
+            modelBuilder.Entity<Student>()
+             .HasIndex(s => s.Email)
+             .IsUnique();
+
+            modelBuilder.Entity<Doctor>()
+                .HasIndex(d => d.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<LabAdmin>()
+                .HasIndex(a => a.Email)
+                .IsUnique();
+
+            #endregion
+
+
             modelBuilder.Entity<Doctor>()
                 .HasIndex(d => d.Email)
                 .IsUnique();
