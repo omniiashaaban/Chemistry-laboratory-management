@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/[controller]")]
 public class GroupController : ControllerBase
 {
+    #region MyRegion
     private readonly GenericRepository<Group> _groupRepository;
     private readonly GenericRepository<Department> _departmentRepository;
     private readonly GenericRepository<Doctor> _doctorRepository;
@@ -20,8 +21,10 @@ public class GroupController : ControllerBase
         _groupRepository = groupRepository;
         _departmentRepository = departmentRepository;
         _doctorRepository = doctorRepository;
-    }
-    [Authorize(Roles = "Student")]
+    } 
+    #endregion
+
+
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GroupDTO>>> GetAllGroups()
@@ -78,7 +81,6 @@ public class GroupController : ControllerBase
 
         return Ok(groups);
     }
-
 
     [HttpPost]
     public async Task<ActionResult<GroupDTO>> CreateGroup([FromBody] GroupDTO groupDto)

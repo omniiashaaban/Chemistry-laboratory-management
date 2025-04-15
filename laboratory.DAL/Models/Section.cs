@@ -16,7 +16,7 @@ namespace laboratory.DAL.Models
         [Key]
         public int Id { get; set; }
         public int Level { get; set; }
-        public string AttendanceCode { get; set; }
+        public string? AttendanceCode { get; set; }=string.Empty;
         public DateTime CodeExpiry { get; set; }
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; }
@@ -28,7 +28,6 @@ namespace laboratory.DAL.Models
 
         //public ICollection<RequestMaterail> RequestChemicals { get; set; } = new List<RequestMaterail>();
         public ICollection<Student> Students { get; set; } = new List<Student>();
-        [NotMapped]
         public Dictionary<int, bool> AttendanceRecords { get; set; } = new();
 
 

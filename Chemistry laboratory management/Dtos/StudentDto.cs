@@ -11,4 +11,11 @@ namespace Chemistry_laboratory_management.Dtos
         public string Email { get; set; }
         public int GroupId { get; set; }
     }
+
+    public class CreateStudentDto
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public int GroupId { get; set; }
+    }
 }

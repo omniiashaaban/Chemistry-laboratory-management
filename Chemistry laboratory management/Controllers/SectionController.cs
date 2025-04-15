@@ -10,6 +10,7 @@ namespace Chemistry_laboratory_management.Controllers
     [ApiController]
     public class SectionController : ControllerBase
     {
+        #region Ctor
         private readonly GenericRepository<Section> _sectionRepository;
         private readonly GenericRepository<Doctor> _doctorRepository;
         private readonly GenericRepository<Experiment> _experimentRepository;
@@ -25,7 +26,8 @@ namespace Chemistry_laboratory_management.Controllers
             _doctorRepository = doctorRepository;
             _experimentRepository = experimentRepository;
             _studentRepository = studentRepository;
-        }
+        } 
+        #endregion
 
         [HttpGet]
         public async Task<IActionResult> GetAllSections()
@@ -40,8 +42,9 @@ namespace Chemistry_laboratory_management.Controllers
                 Level = section.Level,
                 GroupId = section.GroupId
             }).ToList();
+            
 
-            return Ok(new ApiResponse(200, "Sections retrieved successfully.", sectionDTOs));
+            return Ok(sectionDTOs);
         }
 
         [HttpGet("{id}")]
@@ -99,7 +102,6 @@ namespace Chemistry_laboratory_management.Controllers
 
             return Created("", new ApiResponse(201, "Section created successfully.", createdSection));
         }
-
         [HttpPost("generate-code/{sectionId}")]
         public async Task<IActionResult> GenerateAttendanceCode(int sectionId)
         {
@@ -109,13 +111,18 @@ namespace Chemistry_laboratory_management.Controllers
                 return NotFound(new ApiResponse(404, "Section not found."));
 
             section.AttendanceCode = new Random().Next(100000, 999999).ToString();
-            section.CodeExpiry = DateTime.UtcNow.AddSeconds(10);
+
+            // فرق التوقيت لمصر UTC+2 أو +3
+            DateTime expiryUtc = DateTime.UtcNow.AddSeconds(10);
+            DateTime expiryEgypt = expiryUtc.AddHours(2); // أو 3 لو التوقيت الصيفي شغّال
+
+            section.CodeExpiry = expiryEgypt;
 
             await _sectionRepository.UpdateAsync(section);
 
-            return Ok(new ApiResponse(200, "Attendance code generated successfully.",
-                new { Code = section.AttendanceCode, Expiry = section.CodeExpiry }));
+            return Ok(new { Code = section.AttendanceCode, Expiry = section.CodeExpiry });
         }
+
 
         [HttpPost("{sectionId}/attendance/{studentId}")]
         public async Task<IActionResult> MarkAttendance(int sectionId, int studentId, [FromBody] string attendanceCode)
@@ -157,7 +164,7 @@ namespace Chemistry_laboratory_management.Controllers
                 .Select(a => new { StudentId = a.Key, IsPresent = a.Value })
                 .ToList();
 
-            return Ok(new ApiResponse(200, "Attendance list retrieved successfully.", attendanceList));
+            return Ok(attendanceList);
         }
     }
 }

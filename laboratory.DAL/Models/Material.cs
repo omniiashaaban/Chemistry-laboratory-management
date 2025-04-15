@@ -16,7 +16,7 @@ namespace laboratory.DAL.Models
         public string Name { get; set; }
 
         [Required, MaxLength(50)]
-        public string Code { get; set; } // Unique identifier for the material
+        public string Code { get; set; } 
 
         [Required, MaxLength(50)]
         public string Type { get; set; } // Material type/category

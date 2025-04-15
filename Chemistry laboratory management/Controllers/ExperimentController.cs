@@ -32,7 +32,7 @@ namespace Chemistry_laboratory_management.Controllers
 
         #region Experiment Operations
 
-        // Endpoint to add a new experiment
+        // Endpoint to add a new experiment --------------------------------
         [HttpPost("add")]
         public async Task<ActionResult<ExperimentResponseDTO>> AddExperiment([FromBody] AddExperimentDTO addExperimentDTO) 
 

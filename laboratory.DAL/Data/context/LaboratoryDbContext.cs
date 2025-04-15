@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
 using Section = laboratory.DAL.Models.Section;
@@ -109,6 +110,14 @@ namespace laboratory.DAL.Data.context
                 .HasForeignKey(s => s.ExperimentId)
                 .OnDelete(DeleteBehavior.NoAction); // لا تقوم بحذف السجلات المرتبطة
 
+            modelBuilder.Entity<Section>()
+          .Property(s => s.AttendanceRecords)
+          .HasConversion(
+              v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+              v => string.IsNullOrEmpty(v)
+                  ? new Dictionary<int, bool>()
+                  : JsonSerializer.Deserialize<Dictionary<int, bool>>(v, (JsonSerializerOptions)null)
+          );
 
 
         }

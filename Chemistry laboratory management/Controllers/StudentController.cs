@@ -19,9 +19,8 @@ public class StudentController : ControllerBase
         _departmentRepository = departmentRepository;
         _groupRepository = groupRepository;
     }
-    [Authorize(Roles = "Doctor")]
+    //[Authorize(Roles = "Doctor")]
 
-    // Endpoint to get all students
     [HttpGet]
     public async Task<ActionResult<IEnumerable<StudentDto>>> GetAllStudents()
     {
@@ -61,7 +60,8 @@ public class StudentController : ControllerBase
 
     // Endpoint to add a new student
     [HttpPost]
-    public async Task<ActionResult<StudentDto>> CreateStudent([FromBody] StudentDto studentDto)
+
+    public async Task<ActionResult<StudentDto>> CreateStudent([FromBody] CreateStudentDto studentDto)
     {
         var existingStudentWithEmail = await _studentRepository.GetAllAsync();
         if (existingStudentWithEmail.Any(s => s.Email == studentDto.Email))
@@ -83,7 +83,6 @@ public class StudentController : ControllerBase
         };
 
         await _studentRepository.AddAsync(student);
-        studentDto.Id = student.Id;
 
         return CreatedAtAction(nameof(GetStudentById), new { id = student.Id }, studentDto);
     }

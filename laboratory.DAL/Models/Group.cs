@@ -9,7 +9,7 @@ namespace laboratory.DAL.Models
     public class Group
     {
         public int Id { get; set; }
-        public string Name { get; set; } // اسم المجموعة مثل "Group 1A"
+        public string Name { get; set; } 
         public int Level { get; set; }
         public int DepartmentId { get; set; }
         public Department Department { get; set; }
